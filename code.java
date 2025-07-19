@@ -20,6 +20,7 @@ public class PersonalTaskManagerViolations {
 
     private int generateNewId(JSONArray tasks) {
         return tasks.size() + 1;
+    }
 
     private boolean isValidTitle(String title) {
         return title != null && !title.trim().isEmpty();
@@ -85,12 +86,11 @@ public class PersonalTaskManagerViolations {
         newTask.put("id", taskId);
         newTask.put("title", title);
         newTask.put("description", description);
-        newTask.put("due_date", dueDate.format(DATE_FORMATTER));
+        newTask.put("due_date", dueDateStr);
         newTask.put("priority", priorityLevel);
         newTask.put("status", "Chưa hoàn thành");
         newTask.put("created_at", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         newTask.put("last_updated_at", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
-        newTask.put("is_recurring", isRecurring); 
 
         return newTask;
     }
@@ -102,7 +102,6 @@ public class PersonalTaskManagerViolations {
      * @param description Mô tả nhiệm vụ.
      * @param dueDateStr Ngày đến hạn (định dạng YYYY-MM-DD).
      * @param priorityLevel Mức độ ưu tiên ("Thấp", "Trung bình", "Cao").
-     * @param isRecurring Boolean có phải là nhiệm vụ lặp lại không.
      * @return JSONObject của nhiệm vụ đã thêm, hoặc null nếu có lỗi.
      */
     public JSONObject addNewTaskWithViolations(String title, String description,
@@ -134,7 +133,7 @@ public class PersonalTaskManagerViolations {
 
         // Tạo task id mới, không cần UUID phức tạp
         int taskId = generateNewId(tasks);
-        JSONObject newTask = generateJSONTask(taskId, title, description, dueDateStr, priorityLevel);
+        JSONObject newTask = generateJSONTask(taskId, title, description, dueDate, priorityLevel);
         tasks.add(newTask);
 
         // Lưu dữ liệu
