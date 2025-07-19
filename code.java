@@ -18,6 +18,10 @@ public class PersonalTaskManagerViolations {
     private static final String DB_FILE_PATH = "tasks_database.json";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    private int generateNewId(JSONArray tasks) {
+        return tasks.size() + 1;
+    }
+
     // Phương thức trợ giúp để tải dữ liệu (sẽ được gọi lặp lại)
     private static JSONArray loadTasksFromDb() {
         JSONParser parser = new JSONParser();
@@ -53,8 +57,7 @@ public class PersonalTaskManagerViolations {
      * @return JSONObject của nhiệm vụ đã thêm, hoặc null nếu có lỗi.
      */
     public JSONObject addNewTaskWithViolations(String title, String description,
-                                                String dueDateStr, String priorityLevel,
-                                                boolean isRecurring) {
+                                                String dueDateStr, String priorityLevel) {
 
         if (title == null || title.trim().isEmpty()) {
             System.out.println("Lỗi: Tiêu đề không được để trống.");
@@ -97,8 +100,8 @@ public class PersonalTaskManagerViolations {
             }
         }
 
-        String taskId = UUID.randomUUID().toString(); // YAGNI: Có thể dùng số nguyên tăng dần đơn giản hơn.
-
+        // Tạo task id mới, không cần UUID phức tạp
+        int taskId = generateNewId(tasks);
         JSONObject newTask = new JSONObject();
         newTask.put("id", taskId);
         newTask.put("title", title);
@@ -108,11 +111,6 @@ public class PersonalTaskManagerViolations {
         newTask.put("status", "Chưa hoàn thành");
         newTask.put("created_at", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         newTask.put("last_updated_at", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
-        newTask.put("is_recurring", isRecurring); // YAGNI: Thêm thuộc tính này dù chưa có chức năng xử lý nhiệm vụ lặp lại
-        if (isRecurring) {
-
-            newTask.put("recurrence_pattern", "Chưa xác định");
-        }
 
         tasks.add(newTask);
 
@@ -130,8 +128,7 @@ public class PersonalTaskManagerViolations {
             "Mua sách",
             "Sách Công nghệ phần mềm.",
             "2025-07-20",
-            "Cao",
-            false
+            "Cao"
         );
 
         System.out.println("\nThêm nhiệm vụ trùng lặp (minh họa DRY - lặp lại code đọc/ghi DB và kiểm tra trùng):");
@@ -139,8 +136,7 @@ public class PersonalTaskManagerViolations {
             "Mua sách",
             "Sách Công nghệ phần mềm.",
             "2025-07-20",
-            "Cao",
-            false
+            "Cao"
         );
 
         System.out.println("\nThêm nhiệm vụ lặp lại (minh họa YAGNI - thêm tính năng không cần thiết ngay):");
@@ -148,8 +144,7 @@ public class PersonalTaskManagerViolations {
             "Tập thể dục",
             "Tập gym 1 tiếng.",
             "2025-07-21",
-            "Trung bình",
-            true 
+            "Trung bình"
         );
 
         System.out.println("\nThêm nhiệm vụ với tiêu đề rỗng:");
@@ -157,8 +152,7 @@ public class PersonalTaskManagerViolations {
             "",
             "Nhiệm vụ không có tiêu đề.",
             "2025-07-22",
-            "Thấp",
-            false
+            "Thấp"
         );
     }
 }
