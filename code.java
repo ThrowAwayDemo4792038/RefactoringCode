@@ -158,14 +158,6 @@ public class PersonalTaskManagerViolations {
             "Cao"
         );
 
-        System.out.println("\nThêm nhiệm vụ trùng lặp (minh họa DRY - lặp lại code đọc/ghi DB và kiểm tra trùng):");
-        manager.addNewTaskWithViolations(
-            "Mua sách",
-            "Sách Công nghệ phần mềm.",
-            "2025-07-20",
-            "Cao"
-        );
-
         System.out.println("\nThêm nhiệm vụ lặp lại (minh họa YAGNI - thêm tính năng không cần thiết ngay):");
         manager.addNewTaskWithViolations(
             "Tập thể dục",
